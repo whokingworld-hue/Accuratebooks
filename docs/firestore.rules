@@ -1,0 +1,28 @@
+rules_version = '2';
+service cloud.firestore {
+	match /databases/{database}/documents {
+		function isSignedIn() { return request.auth != null; }
+		function userId() { return request.auth.uid; }
+		function hasRole(r) { return request.auth.token.role == r; }
+		function inRoles(rs) { return rs.hasAny([request.auth.token.role]); }
+
+		match /users/{uid} {
+			allow read: if isSignedIn() && (uid == userId() || hasRole('admin'));
+			allow create: if isSignedIn() && uid == userId();
+			allow update: if isSignedIn() && (uid == userId() || hasRole('admin'));
+		}
+
+		// Example client-owned data
+		match /clients/{clientId}/** {
+			allow read, write: if isSignedIn() && (
+				clientId == userId() || hasRole('admin') || hasRole('staff') || hasRole('ca')
+			);
+		}
+
+		// Default deny
+		match /{document=**} {
+			allow read, write: if false;
+		}
+	}
+}
+
