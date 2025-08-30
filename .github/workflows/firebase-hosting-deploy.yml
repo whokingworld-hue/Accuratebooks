@@ -1,0 +1,42 @@
+# Co-authored-by: whokingworld <whokingworld@gmail.com> (bd0f252)
+name: Deploy Frontend to Firebase Hosting
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'nextapp/**'
+      - '.github/workflows/firebase-hosting-deploy.yml'
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: nextapp
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: nextapp/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Build and Export
+        run: npm run build && npm run export
+
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          channelId: live
+          projectId: accuratebooks-99f5f
+          entryPoint: nextapp
+
