@@ -22,6 +22,7 @@ app.use(cors({
 }));
 
 // Health
+app.get('/', (req, res) => res.json({ status: 'ok', service: 'AccurateBooks backend', docs: '/api/docs', health: '/health' }));
 app.get('/health', (req, res) => res.json({ status: 'ok', ts: Date.now() }));
 
 // Routes
@@ -45,6 +46,11 @@ const swaggerSpec = swaggerJsdoc({
 	apis: ['./src/routes/*.js']
 });
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// Not found handler
+app.use((req, res) => {
+	return res.status(404).json({ error: 'Not Found', path: req.path });
+});
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
