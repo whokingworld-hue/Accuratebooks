@@ -1,0 +1,15 @@
+{
+  "hosting": {
+    "site": "accurate-books",
+    "public": "out",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "headers": [
+      {"source": "**/*.@(js|css)", "headers": [{"key": "Cache-Control", "value": "public,max-age=31536000,immutable"}]}
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false,
+    "rewrites": [
+      { "source": "**", "destination": "/index.html" }
+    ]
+  }
+}

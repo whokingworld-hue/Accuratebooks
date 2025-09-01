@@ -1,0 +1,13 @@
+# Co-authored-by: whokingworld <whokingworld@gmail.com> (bd0f252)
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env
+.env.*
+.git
+.github
+coverage
+dist
+build
+

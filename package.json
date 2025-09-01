@@ -1,0 +1,10 @@
+{
+  "name": "accuratebooks-monorepo",
+  "private": true,
+  "license": "UNLICENSED",
+  "workspaces": [],
+  "dependencies": {
+    "axios": "^1.7.7",
+    "csv-parse": "^5.5.6"
+  }
+}
